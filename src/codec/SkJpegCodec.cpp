@@ -80,6 +80,7 @@ SkJpegCodec::SkJpegCodec(const SkImageInfo& srcInfo, SkStream* stream,
     : INHERITED(srcInfo, stream)
     , fDecoderMgr(decoderMgr)
     , fReadyState(decoderMgr->dinfo()->global_state)
+    , fSrcRow(nullptr)
     , fSwizzlerSubset(SkIRect::MakeEmpty())
 {}
 
@@ -155,6 +156,11 @@ bool SkJpegCodec::onRewind() {
     }
     SkASSERT(nullptr != decoderMgr);
     fDecoderMgr.reset(decoderMgr);
+
+    fSwizzler.reset(nullptr);
+    fSrcRow = nullptr;
+    fStorage.free();
+
     return true;
 }
 
